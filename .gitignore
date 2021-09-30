@@ -1,3 +1,6 @@
 **.hi
 **.ho
-**/a.out
+**.o
+**/*.out
+**/ciphertext.txt
+**/alice_in_wonderland.txt
