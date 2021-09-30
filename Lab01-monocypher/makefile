@@ -1,5 +1,6 @@
 install:
-	sudo apt-get install haskell-platform
+	choco install haskell-dev
+	refreshenv
 
 frequency:
 	ghc mono_alphabetic.hs -o decoder.out && ./decoder.out frequency $(ARGS)
