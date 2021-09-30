@@ -1,12 +1,16 @@
-import Data.Char (chr, isAlpha, isUpper, ord, toLower)
+import Data.Char (chr, isAlpha, isAscii, isUpper, ord, toLower)
 import Data.Function (on)
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
+import Distribution.Simple.Setup (BooleanFlag)
 import System.Environment as Env (getArgs)
 
-type CountMap = Map.Map Char Double
+type CountMap = Map.Map Char Int
 
 type DistributionMap = Map.Map Char Double
+
+emptyMap :: CountMap
+emptyMap = Map.fromList $ zip ['a' .. 'z'] (repeat 0)
 
 main :: IO ()
 main = do
@@ -44,16 +48,16 @@ decode args = do
 
 findCharDistribution :: String -> DistributionMap
 findCharDistribution txt = do
-  let lowerAlphabetic = (map toLower . filter isAlpha) txt
+  let lowerAlphabetic = (map toLower . filter isValidChar) txt
   let charCounts = countChars lowerAlphabetic
   let totalChars = Map.foldr (+) 0 charCounts
   let mapping = (\n -> on (/) fromIntegral n totalChars) :: Int -> Double
   Map.map mapping charCounts
   where
-    countChars :: String -> Map.Map Char Int
-    countChars = foldl (flip incrementChar) Map.empty
+    countChars :: String -> CountMap
+    countChars = foldl (flip incrementChar) emptyMap
 
-    incrementChar :: Char -> Map.Map Char Int -> Map.Map Char Int
+    incrementChar :: Char -> CountMap -> CountMap
     incrementChar c map = Map.insert c (1 + Map.findWithDefault 0 c map) map
 
 calcError :: DistributionMap -> DistributionMap -> Double
@@ -66,6 +70,9 @@ rotateText r = do
   map $ rotateChar r
 
 rotateChar :: Int -> Char -> Char
-rotateChar r c = if isAlpha c then chr $ (ord c - a + r) `mod` 26 + a else c
+rotateChar r c = if isValidChar c then chr $ (ord c - a + r) `mod` 26 + a else c
   where
     a = ord (if isUpper c then 'A' else 'a')
+
+isValidChar :: Char -> Bool
+isValidChar c = isAscii c && isAlpha c
