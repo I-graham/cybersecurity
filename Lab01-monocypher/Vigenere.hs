@@ -18,9 +18,9 @@ defaultSettings = SearchSettings {wordLen = 3, maxWords = 3}
 vigenere :: String -> String -> (String, String)
 vigenere reference cipher = do
   --Created by analyzing frequency of repeated words
-  let keySizeGuess = 4
+  let keyLength = findKeyLength cipher
 
-  let buckets = splitIntoBuckets keySizeGuess cipher
+  let buckets = splitIntoBuckets keyLength cipher
   let decoder = decode reference
   let decoded = map decoder buckets
   let (key, message) = unzip decoded
@@ -39,16 +39,19 @@ splitIntoBuckets n l
 combineBuckets :: [String] -> String
 combineBuckets texts = concat $ transpose texts
 
---Functions below this line were used for analysis, and may not
---be used for decoding.
+--Functions below this line were used for analysis
+findKeyLength :: String -> Int
+findKeyLength text = do
+  let dists = findDistancesBetweenRepeats text
+  foldl1 gcd dists
+
 findDistancesBetweenRepeats :: String -> [Int]
 findDistancesBetweenRepeats text = do
-  let getPositions = findPositions text
   let topRepeats = map fst (findTopRepeats defaultSettings text)
-  concatMap (findDistances . getPositions) topRepeats
+  concatMap (tail . findDistances . findPositions) topRepeats
   where
-    findPositions :: String -> String -> [Int]
-    findPositions full substr = findIndices (substr `isPrefixOf`) (tails full)
+    findPositions :: String -> [Int]
+    findPositions substr = findIndices (substr `isPrefixOf`) (tails text)
 
     findDistances :: [Int] -> [Int]
     findDistances positions = snd $ mapAccumL (\p1 p2 -> (p2, p2 - p1)) 0 positions
