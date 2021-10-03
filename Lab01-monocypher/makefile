@@ -2,11 +2,16 @@ install:
 	choco install haskell-dev
 	refreshenv
 
+clean:
+	rm *.out
+	rm *.o
+	rm *.hi
+
 frequency:
-	ghc mono_alphabetic.hs -o decoder.out && ./decoder.out frequency $(ARGS)
+	ghc decoder.hs -o decoder.out && ./decoder.out frequency $(ARGS)
 
 decode:
-	ghc mono_alphabetic.hs -o decoder.out && ./decoder.out decode $(ARGS)
+	ghc decoder.hs -o decoder.out && ./decoder.out decode $(ARGS)
 
 vigenere:
-		ghc mono_alphabetic.hs -o decoder.out && ./decoder.out vigenere $(ARGS)
+		ghc decoder.hs -o decoder.out && ./decoder.out vigenere $(ARGS)
