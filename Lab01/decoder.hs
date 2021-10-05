@@ -8,12 +8,13 @@ import Data.Maybe (fromMaybe)
 import Distribution.Simple.Setup (BooleanFlag)
 import System.Environment (getArgs)
 import Utils (decode, frequency)
-import Vigenere (findDistancesBetweenRepeats, vigenere)
+import VigenereSolver (findDistancesBetweenRepeats, vigenere)
 
 main :: IO ()
 main = do
   args <- getArgs
   let (h : t) = args
+  putStrLn ""
   case h of
     "decode" -> decode' t
     "frequency" -> frequency' t

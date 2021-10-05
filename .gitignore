@@ -4,3 +4,4 @@
 **/*.out
 **/ciphertext.txt
 **/alice_in_wonderland.txt
+**/vigenere.txt

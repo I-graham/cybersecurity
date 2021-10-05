@@ -3,9 +3,7 @@ install:
 	refreshenv
 
 clean:
-	rm *.out
-	rm *.o
-	rm *.hi
+	rm *.out ; rm *.o ; rm *.hi
 
 frequency:
 	ghc decoder.hs -o decoder.out && ./decoder.out frequency $(ARGS)

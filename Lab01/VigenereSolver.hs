@@ -1,4 +1,4 @@
-module Vigenere where
+module VigenereSolver where
 
 import Data.Char (chr, ord)
 import Data.Function (on)
