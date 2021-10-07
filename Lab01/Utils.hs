@@ -51,8 +51,7 @@ calcError refDist textDist = M.foldr (+) 0 distMap
     distMap = intersectionWith (\a b -> (a - b) ^ 2) refDist textDist
 
 rotateText :: Int -> String -> String
-rotateText r = do
-  map $ rotateChar r
+rotateText r = map (rotateChar r)
 
 rotateChar :: Int -> Char -> Char
 rotateChar r c = if isValidChar c then chr $ (ord c - a + r) `mod` 26 + a else c

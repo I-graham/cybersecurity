@@ -8,10 +8,10 @@ main = do
   text <- readFile $ args !! 1
   key <- readFile $ args !! 2
   putStrLn ""
-  case head args of
-    "decode" -> putStrLn $ decode key text
-    "encode" -> putStrLn $ encode key text
-    _ -> putStrLn "Invalid input."
+  putStrLn $ case head args of
+    "decode" -> decode key text
+    "encode" -> encode key text
+    _ -> "Invalid input."
 
 decode :: String -> String -> String
 decode key text = do
@@ -22,8 +22,7 @@ encode :: String -> String -> String
 encode key text = do
   let shiftKeys = map charToShift key
   let buckets = splitIntoBuckets (length key) text
-  let shifted = zipWith rotateText shiftKeys buckets
-  combineBuckets shifted
+  combineBuckets (zipWith rotateText shiftKeys buckets)
   where
     charToShift :: Char -> Int
     charToShift c = ord c - ord 'A'
@@ -31,17 +30,14 @@ encode key text = do
 --Also used in Lab01
 splitIntoBuckets :: Int -> String -> [String]
 splitIntoBuckets n l
-  | n > length l = map (\p -> [l !! p | p < length l]) [0 .. n]
-  | otherwise = do
-    let rest = splitIntoBuckets n (drop n l)
-    map (\p -> (l !! p) : (rest !! p)) [0 .. n -1]
+  | n > length l = take n $ map (: []) l ++ repeat []
+  | otherwise = zipWith (:) l $ splitIntoBuckets n (drop n l)
 
 combineBuckets :: [String] -> String
 combineBuckets texts = concat $ transpose texts
 
 rotateText :: Int -> String -> String
-rotateText r = do
-  map $ rotateChar r
+rotateText r = map (rotateChar r)
 
 rotateChar :: Int -> Char -> Char
 rotateChar r c = if isValidChar c then chr $ (ord c - a + r) `mod` 26 + a else c

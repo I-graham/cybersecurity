@@ -4,8 +4,6 @@ import Data.Char (chr, ord)
 import Data.Function (on)
 import Data.List (findIndices, isPrefixOf, mapAccumL, sortBy, tails, transpose)
 import Data.Map (Map, assocs, empty, insertWith)
-import Data.Text.Lazy.IO (hPutStrLn)
-import Distribution.Simple.Setup (CopyDest, emptyTestFlags)
 import Utils (decode)
 
 type WordMap = Map String Int
@@ -17,7 +15,6 @@ defaultSettings = SearchSettings {wordLen = 3, maxWords = 3}
 
 vigenere :: String -> String -> (String, String)
 vigenere reference cipher = do
-  --Created by analyzing frequency of repeated words
   let keyLength = findKeyLength cipher
 
   let buckets = splitIntoBuckets keyLength cipher

@@ -5,8 +5,11 @@ install:
 clean:
 	rm *.out ; rm *.o ; rm *.hi
 
-encode:
-	ghc vigenere.hs -o vigenere.out && ./vigenere.out encode $(ARGS)
+encode: vigenere.out
+	./vigenere.out encode $(ARGS)
 
-decode:
-	ghc vigenere.hs -o vigenere.out && ./vigenere.out decode $(ARGS)
+decode: vigenere.out
+	./vigenere.out decode $(ARGS)
+
+vigenere.out: vigenere.hs
+	ghc vigenere.hs -o vigenere.out
