@@ -1,20 +1,25 @@
 module Main where
 
 import Data.Bits (xor)
+import Data.Char (chr, ord)
+import Data.Function (on)
+import Numeric (showHex)
 import System.Environment (getArgs)
 
 main :: IO ()
 main = do
-  [mode, textFile, keyFile] <- getArgs
-  text <- readFile textFile
+  [mode, keyFile, textFile] <- getArgs
   key <- readFile keyFile
+  text <- readFile textFile
   putStrLn $ case mode of
-    "human" -> human text key
-    "numOut" -> numOut text key
+    "human" -> human key text
+    "numOut" -> numOut key text
     _ -> "Invalid"
 
-human :: String -> String -> String
-human text key = "!"
-
 numOut :: String -> String -> String
-numOut text key = "!"
+numOut key text = do
+  let nums = zipWith (xor `on` ord) text $ (concat . repeat) key
+  foldr ((\a b -> " "++ a b) . showHex) "" nums
+
+human :: String -> String -> String
+human key text = "!"
