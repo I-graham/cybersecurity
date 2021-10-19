@@ -16,10 +16,11 @@ main = do
     "numOut" -> numOut key text
     _ -> "Invalid"
 
+xorNums :: String -> String -> [Int]
+xorNums key text = zipWith (xor `on` ord) text $ (concat . repeat) key
+
 numOut :: String -> String -> String
-numOut key text = do
-  let nums = zipWith (xor `on` ord) text $ (concat . repeat) key
-  foldr ((\a b -> " "++ a b) . showHex) "" nums
+numOut key text = foldr (\a -> showHex a . (" " ++)) "" $ xorNums key text
 
 human :: String -> String -> String
-human key text = "!"
+human key text = map chr (xorNums key text)
