@@ -17,10 +17,10 @@ main = do
     _ -> "Invalid"
 
 xorNums :: String -> String -> [Int]
-xorNums key text = zipWith (xor `on` ord) text $ (concat . repeat) key
+xorNums key = zipWith (xor `on` ord) ((concat . repeat) key)
 
 numOut :: String -> String -> String
-numOut key text = foldr (\a -> showHex a . (" " ++)) "" $ xorNums key text
+numOut key = tail . foldr (\a -> (" " ++) . showHex a) "" . xorNums key
 
 human :: String -> String -> String
 human key text = map chr (xorNums key text)
