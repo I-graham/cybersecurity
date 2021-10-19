@@ -2,4 +2,6 @@
 **.ho
 **.o
 **/*.out
+**/out
+**/output
 **/*.txt

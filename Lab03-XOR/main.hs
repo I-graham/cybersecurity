@@ -11,7 +11,7 @@ main = do
   [mode, keyFile, textFile] <- getArgs
   key <- readFile keyFile
   text <- readFile textFile
-  putStrLn $ case mode of
+  writeFile "output" $ case mode of
     "human" -> human key text
     "numOut" -> numOut key text
     _ -> "Invalid"
