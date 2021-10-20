@@ -11,10 +11,8 @@ main = do
   [mode, keyFile, textFile] <- getArgs
   key <- readFile keyFile
   text <- readFile textFile
-  writeFile "output" $ case mode of
-    "human" -> human key text
-    "numOut" -> numOut key text
-    _ -> "Invalid"
+  let func = if mode == "human" then human else numOut
+  writeFile "output" (func key text)
 
 xorNums :: String -> String -> [Int]
 xorNums key = zipWith (xor `on` ord) ((concat . repeat) key)
